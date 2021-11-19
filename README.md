@@ -50,7 +50,7 @@ Uncaught Error: No such module "stream".
 
 Which of course makes sense, because `stream` isn't available in Workers.
 
-After removing code which references `stream`, the Worker will now compile and start properly, sending a request to the Worker which triggers server-side rendering will, however, fail.
+After removing code which references `stream`, the Worker will now compile and start properly. Sending a request to the Worker which triggers server-side rendering will still fail, however.
 
 ```bash
 curl localhost:8787/
