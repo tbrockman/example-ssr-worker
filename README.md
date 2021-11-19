@@ -50,7 +50,22 @@ Uncaught Error: No such module "stream".
 
 Which of course makes sense, because `stream` isn't available in Workers.
 
-## Testing responses
+After removing code which references `stream`, the Worker will now compile and start properly, sending a request to the Worker which triggers server-side rendering will, however, fail.
+
+```bash
+curl localhost:8787/
+
+# ... in the Worker logs
+
+ReferenceError: document is not defined
+    at createCache (./index.mjs:1173:38)
+    at handleRequest (./index.mjs:2241:19)
+    at Object.fetch (./index.mjs:2236:22) at line 1172, col 36
+```
+
+This is due to the Worker bundler targeting the `browser`. Rollup (webpack untested) will optimize away `isBrowser` checks (as it *should* always be true), which still leaves references to `document`, which is undefined in the Worker environment. This issue is also described [here](https://github.com/emotion-js/emotion/issues/1455). Hardcoding `isBrowser = false` results in successful rendering.
+
+## Ideal behavior
 
 ```bash
 curl localhost:8787/
