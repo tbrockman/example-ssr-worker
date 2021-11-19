@@ -13,6 +13,3 @@ command = "npm install && npm run build"
 # The "modules" upload format is required for all projects that export a Durable Objects class
 format = "modules"
 main = "./index.mjs"
-
-[durable_objects]
-bindings = [{name = "EXAMPLE", class_name = "Example"}]

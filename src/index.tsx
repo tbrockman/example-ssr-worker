@@ -7,32 +7,20 @@ import createCache from '@emotion/cache'
 
 import App from './frontend/app'
 
-export { Example } from './example'
-
-interface Env {
-  EXAMPLE: DurableObjectNamespace
-}
-
 export default {
-  async fetch(request: Request, env: Env) {
+  async fetch(request: Request, env: any) {
     return await handleRequest(request, env)
   },
 }
 
-async function handleRequest(request: Request, env: Env) {
-  let id = env.EXAMPLE.idFromName('A')
-  let obj = env.EXAMPLE.get(id)
-  let resp = await obj.fetch(request.url)
-  let body = await resp.json() as any
-  let text = body.text
-
+async function handleRequest(request: Request, env: any) {
   const key = 'custom'
   const cache = createCache({ key })
   const { extractCriticalToChunks, constructStyleTagsFromChunks } = createEmotionServer(cache)
   
   const html = renderToString(
     <CacheProvider value={cache}>
-      <App text={text}/>
+      <App text={'example'}/>
     </CacheProvider>
   )
   
